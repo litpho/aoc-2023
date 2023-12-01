@@ -1,6 +1,9 @@
 use anyhow::Result;
 
 const DATA: &str = include_str!("input.txt");
+const DIGITS_AS_WORDS: [&str; 10] = [
+    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+];
 
 fn main() -> Result<()> {
     let (took, result) = took::took(|| parse_input_one(DATA));
@@ -52,30 +55,26 @@ fn parse(input: &str, use_words: bool) -> Vec<u32> {
 fn parse_line(line: &str, use_words: bool) -> u32 {
     let digits = (0..line.len())
         .filter_map(|i| match_to_char(&line[i..], use_words))
-        .collect::<Vec<char>>();
+        .collect::<Vec<u32>>();
 
-    format!("{}{}", digits.first().unwrap(), digits.last().unwrap())
-        .parse::<u32>()
-        .unwrap()
+    digits.first().unwrap() * 10 + digits.last().unwrap()
 }
 
-fn match_to_char(input: &str, use_words: bool) -> Option<char> {
+fn match_to_char(input: &str, use_words: bool) -> Option<u32> {
     if let Some(first_char) = input.chars().next() {
         if first_char.is_ascii_digit() {
-            return Some(first_char);
+            return first_char.to_digit(10);
         }
     }
 
     if use_words {
-        if let Some(c) = [
-            "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
-        ]
-        .iter()
-        .enumerate()
-        .find(|(_, word)| input.starts_with(*word))
-        .and_then(|(i, _)| char::from_digit(i as u32, 10))
+        if let Some(digit) = DIGITS_AS_WORDS
+            .iter()
+            .enumerate()
+            .find(|(_, word)| input.starts_with(*word))
+            .map(|(i, _)| i as u32)
         {
-            return Some(c);
+            return Some(digit);
         }
     }
 
