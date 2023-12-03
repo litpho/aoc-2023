@@ -14,9 +14,9 @@ fn main() -> Result<()> {
     println!("Result part one: {result}");
     println!("Time spent: {took}");
 
-    // let (took, result) = took::took(|| part_two(&input));
-    // println!("Result part two: {result}");
-    // println!("Time spent: {took}");
+    let (took, result) = took::took(|| part_two(&input));
+    println!("Result part two: {result}");
+    println!("Time spent: {took}");
 
     Ok(())
 }
@@ -34,8 +34,21 @@ fn part_one(input: &EngineMap) -> u32 {
     numbers.iter().map(|number| number.value).sum()
 }
 
-fn part_two(_input: &EngineMap) -> u32 {
-    todo!()
+fn part_two(input: &EngineMap) -> u32 {
+    let mut gear_total = 0;
+    for symbol in input.symbols.iter().filter(|s| s.value == '*') {
+        let mut numbers = vec![];
+        for number in input.numbers.iter() {
+            if number.near_symbol(symbol) {
+                numbers.push(number.value);
+            }
+        }
+        if numbers.len() == 2 {
+            gear_total += numbers.iter().product::<u32>();
+        }
+    }
+
+    gear_total
 }
 
 #[derive(Debug)]
@@ -147,17 +160,17 @@ mod tests {
         Ok(())
     }
 
-    // #[test]
-    // fn test_part_two_testdata() -> Result<()> {
-    //     assert_eq!(2286, part_two(&parse_input(TESTDATA)?));
-    //
-    //     Ok(())
-    // }
-    //
-    // #[test]
-    // fn test_part_two() -> Result<()> {
-    //     assert_eq!(71220, part_two(&parse_input(DATA)?));
-    //
-    //     Ok(())
-    // }
+    #[test]
+    fn test_part_two_testdata() -> Result<()> {
+        assert_eq!(467835, part_two(&parse_input(TESTDATA)?));
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_part_two() -> Result<()> {
+        assert_eq!(91622824, part_two(&parse_input(DATA)?));
+
+        Ok(())
+    }
 }
