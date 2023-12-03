@@ -71,11 +71,7 @@ impl Number {
     }
 
     fn horizontal_range(&self) -> Range<usize> {
-        if self.position.0 == 0 {
-            self.position.0..(self.position.0 + self.length + 1)
-        } else {
-            (self.position.0 - 1)..(self.position.0 + self.length + 1)
-        }
+        self.position.0.saturating_sub(1)..self.position.0 + self.length + 1
     }
 }
 
