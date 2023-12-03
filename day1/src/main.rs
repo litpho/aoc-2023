@@ -62,8 +62,8 @@ fn parse_line(line: &str, use_words: bool) -> u32 {
 
 fn match_to_char(input: &str, use_words: bool) -> Option<u32> {
     if let Some(first_char) = input.chars().next() {
-        if first_char.is_ascii_digit() {
-            return first_char.to_digit(10);
+        if let Some(digit) = first_char.to_digit(10) {
+            return Some(digit);
         }
     }
 
