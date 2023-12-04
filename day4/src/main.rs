@@ -1,6 +1,3 @@
-use std::cmp::min;
-use std::collections::{HashMap, HashSet};
-
 use anyhow::Result;
 use nom::character::complete::space0;
 use nom::sequence::pair;
@@ -34,33 +31,28 @@ fn main() -> Result<()> {
 fn part_one(input: &[Card]) -> u32 {
     input
         .iter()
-        .map(|card| match card.num_matches() {
+        .map(|card| match card.num_matches {
             0 => 0,
-            num_matches => 2u32.pow(num_matches as u32 - 1),
+            num_matches => 2u32.pow(num_matches - 1),
         })
         .sum()
 }
 
 fn part_two(input: &[Card]) -> usize {
-    let max_id = input.len() as u32 + 1;
-    let lookup_map = input
+    let lookup_matches = input
         .iter()
-        .map(|card| (card.id, card))
-        .collect::<HashMap<u32, &Card>>();
+        .map(|card| card.num_matches)
+        .collect::<Vec<u32>>();
     let mut number_of_cards = 0;
     let mut cards = input.iter().map(|card| card.id).collect::<Vec<u32>>();
     loop {
         let mut added_cards: Vec<u32> = vec![];
         cards.iter().for_each(
-            |card_id| match lookup_map.get(card_id).unwrap().num_matches() {
+            |card_id| match lookup_matches.get(*card_id as usize - 1).unwrap() {
                 0 => {}
-                num_matches => {
-                    if card_id < &max_id {
-                        (card_id + 1..=min(max_id, card_id + num_matches as u32)).for_each(|id| {
-                            added_cards.push(id);
-                        })
-                    }
-                }
+                num_matches => (0..*num_matches).for_each(|i| {
+                    added_cards.push(card_id + 1 + i);
+                }),
             },
         );
         number_of_cards += cards.len();
@@ -74,16 +66,16 @@ fn part_two(input: &[Card]) -> usize {
 #[derive(Debug)]
 struct Card {
     id: u32,
-    winning_numbers: HashSet<u32>,
-    my_numbers: HashSet<u32>,
+    num_matches: u32,
 }
 
 impl Card {
-    pub fn num_matches(&self) -> usize {
-        self.my_numbers
-            .intersection(&self.winning_numbers)
-            .collect::<Vec<&u32>>()
-            .len()
+    pub fn new(id: u32, winning_numbers: Vec<u32>, my_numbers: Vec<u32>) -> Self {
+        let num_matches = my_numbers
+            .iter()
+            .filter(|mine| winning_numbers.contains(mine))
+            .count() as u32;
+        Self { id, num_matches }
     }
 }
 
@@ -95,13 +87,9 @@ fn parse_line(input: &str) -> IResult<&str, Card> {
     map(
         separated_pair(parse_id, tag(": "), parse_number_groups),
         |(id, (my_numbers, winning_numbers))| {
-            let my_numbers = my_numbers.into_iter().collect();
-            let winning_numbers = winning_numbers.into_iter().collect();
-            Card {
-                id,
-                my_numbers,
-                winning_numbers,
-            }
+            // let my_numbers = my_numbers.into_iter().collect();
+            // let winning_numbers = winning_numbers.into_iter().collect();
+            Card::new(id, my_numbers, winning_numbers)
         },
     )(input)
 }
