@@ -39,18 +39,14 @@ fn part_one(input: &[Card]) -> u32 {
 }
 
 fn part_two(input: &[Card]) -> usize {
-    let lookup_matches = input
-        .iter()
-        .map(|card| card.num_matches)
-        .collect::<Vec<u32>>();
     let mut number_of_cards = 0;
     let mut cards = input.iter().map(|card| card.id).collect::<Vec<u32>>();
     loop {
         let mut added_cards: Vec<u32> = vec![];
         cards.iter().for_each(
-            |card_id| match lookup_matches.get(*card_id as usize - 1).unwrap() {
+            |card_id| match input.get(*card_id as usize - 1).unwrap().num_matches {
                 0 => {}
-                num_matches => (0..*num_matches).for_each(|i| {
+                num_matches => (0..num_matches).for_each(|i| {
                     added_cards.push(card_id + 1 + i);
                 }),
             },
