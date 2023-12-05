@@ -43,14 +43,14 @@ fn part_two(input: &[Card]) -> usize {
     let mut cards = input.iter().map(|card| card.id).collect::<Vec<u32>>();
     loop {
         let mut added_cards: Vec<u32> = vec![];
-        cards.iter().for_each(
-            |card_id| match input.get(*card_id as usize - 1).unwrap().num_matches {
+        cards.iter().for_each(|card_id| {
+            match input.get(*card_id as usize - 1).unwrap().num_matches {
                 0 => {}
                 num_matches => (0..num_matches).for_each(|i| {
                     added_cards.push(card_id + 1 + i);
                 }),
-            },
-        );
+            }
+        });
         number_of_cards += cards.len();
         if added_cards.is_empty() {
             return number_of_cards;
