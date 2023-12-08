@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use ahash::{HashSet,HashSetExt};
 use std::ops::Range;
 
 use anyhow::Result;
