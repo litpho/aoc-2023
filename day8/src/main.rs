@@ -1,4 +1,5 @@
-use std::collections::HashMap;
+// use std::collections::HashMap;
+use ahash::{HashMap, HashMapExt};
 
 use anyhow::Result;
 use nom::{
