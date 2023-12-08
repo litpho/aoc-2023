@@ -127,15 +127,15 @@ mod tests {
 
     #[test]
     fn test_part_two_testdata() -> Result<()> {
-        assert_eq!(30, part_two(&parse_input(TESTDATA)?));
+        assert_eq!(71503, part_two(&parse_input(TESTDATA)?));
 
         Ok(())
     }
 
-    // #[test]
-    // fn test_part_two() -> Result<()> {
-    //     assert_eq!(5329815, part_two(&parse_input(DATA)?));
-    //
-    //     Ok(())
-    // }
+    #[test]
+    fn test_part_two() -> Result<()> {
+        assert_eq!(42948149, part_two(&parse_input(DATA)?));
+
+        Ok(())
+    }
 }
