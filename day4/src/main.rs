@@ -1,12 +1,10 @@
 use anyhow::Result;
-use nom::character::complete::space0;
-use nom::sequence::pair;
 use nom::{
     bytes::complete::tag,
-    character::complete::{self, line_ending, space1},
+    character::complete::{self, line_ending, space0, space1},
     combinator::map,
     multi::separated_list1,
-    sequence::{preceded, separated_pair},
+    sequence::{pair, preceded, separated_pair},
     IResult,
 };
 
@@ -82,11 +80,7 @@ fn parse(input: &str) -> IResult<&str, Vec<Card>> {
 fn parse_line(input: &str) -> IResult<&str, Card> {
     map(
         separated_pair(parse_id, tag(": "), parse_number_groups),
-        |(id, (my_numbers, winning_numbers))| {
-            // let my_numbers = my_numbers.into_iter().collect();
-            // let winning_numbers = winning_numbers.into_iter().collect();
-            Card::new(id, my_numbers, winning_numbers)
-        },
+        |(id, (my_numbers, winning_numbers))| Card::new(id, my_numbers, winning_numbers),
     )(input)
 }
 
