@@ -38,28 +38,23 @@ fn part_two(input: &mut [Vec<i32>]) -> i32 {
 }
 
 fn solve_line(input: &[i32]) -> i32 {
-    let mut solution = vec![input.to_vec()];
-    loop {
-        let next_line = solution
-            .last()
-            .unwrap()
+    let solution = std::iter::successors(Some(input.to_vec()), |prev_line| {
+        let next_line = prev_line
             .windows(2)
             .map(|x| x[1] - x[0])
             .collect::<Vec<i32>>();
-        let end = next_line.iter().all(|x| x == &0);
-        solution.push(next_line);
-        if end {
-            break;
+        if next_line.iter().all(|x| x == &0) {
+            None
+        } else {
+            Some(next_line)
         }
-    }
+    })
+    .collect::<Vec<Vec<i32>>>();
 
-    for i in (1..solution.len()).rev() {
-        let last = *solution[i].last().unwrap();
-        let second = *solution[i - 1].last().unwrap();
-        solution[i - 1].push(last + second);
-    }
-
-    *solution[0].last().unwrap()
+    solution
+        .iter()
+        .rev()
+        .fold(0, |acc, x| x.last().unwrap() + acc)
 }
 
 fn parse(input: &str) -> IResult<&str, Vec<Vec<i32>>> {
