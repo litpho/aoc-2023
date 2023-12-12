@@ -66,6 +66,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "day12"
+version = "0.1.0"
+dependencies = [
+ "ahash",
+ "anyhow",
+ "itertools",
+ "nom",
+ "once_cell",
+ "took",
+]
+
+[[package]]
 name = "day2"
 version = "0.1.0"
 dependencies = [
