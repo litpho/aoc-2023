@@ -8,5 +8,5 @@ edition = "2021"
 [dependencies]
 anyhow = "1"
 bit-vec = "0.6"
-itertools = "0.12"
+itertools = "0.13"
 took = "0.1"
