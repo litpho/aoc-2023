@@ -13,7 +13,7 @@ const DATA: &str = include_str!("input.txt");
 
 fn main() -> Result<()> {
     let (took, result) = took::took(|| parse_input(DATA));
-    println!("Time spent parsing: {}", took);
+    println!("Time spent parsing: {took}");
     let input = result?;
 
     let (took, result) = took::took(|| part_one(&input));
@@ -39,7 +39,7 @@ fn part_one(input: &[Hand]) -> u32 {
 fn part_two(input: Vec<Hand>) -> u32 {
     input
         .into_iter()
-        .map(|hand| hand.use_jokers())
+        .map(Hand::use_jokers)
         .sorted()
         .enumerate()
         .map(|(i, hand)| (i + 1) as u32 * hand.score)
@@ -233,7 +233,7 @@ fn parse_line(input: &str) -> IResult<&str, Hand> {
                 .into_iter()
                 .map(|c| {
                     c.try_into()
-                        .unwrap_or_else(|_| panic!("{} is not a valid label", c))
+                        .unwrap_or_else(|()| panic!("{c} is not a valid label"))
                 })
                 .collect::<Vec<Label>>();
             Hand::new(cards, score)

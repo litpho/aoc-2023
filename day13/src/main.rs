@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+
 use anyhow::Result;
 use nom::{
     character::{complete::line_ending, complete::one_of},
@@ -11,7 +14,7 @@ const DATA: &str = include_str!("input.txt");
 
 fn main() -> Result<()> {
     let (took, result) = took::took(|| parse_input(DATA));
-    println!("Time spent parsing: {}", took);
+    println!("Time spent parsing: {took}");
     let input = result?;
 
     let (took, result) = took::took(|| part_one(&input));
@@ -69,8 +72,8 @@ fn part_two(input: &[Pattern]) -> u32 {
     let result = pattern.find_almost_mirror();
     // let columns = Pattern::find_almost_mirror(&pattern.columns);
 
-    println!("Result: {:?}", result);
-    // println!("Columns: {:?}", columns);
+    println!("Result: {result:?}");
+    // println!("Columns: {columns:?}");
 
     0
 }
@@ -157,9 +160,9 @@ impl Pattern {
                 let mut lines = self.lines.clone();
                 let c = lines.get_mut(y).unwrap().get_mut(x).unwrap();
                 if c == &'1' {
-                    *c = '0'
+                    *c = '0';
                 } else {
-                    *c = '1'
+                    *c = '1';
                 }
                 let pattern = Pattern::new(lines);
                 let new = pattern
@@ -181,7 +184,7 @@ impl Pattern {
             if short[i] != long[long.len() - 1 - i] {
                 if smudge.is_none() {
                     smudge = Some((short[i], long[long.len() - 1 - i]));
-                    println!("Temp smudge: {:?}", smudge);
+                    println!("Temp smudge: {smudge:?}");
                 } else {
                     return None;
                 }
@@ -229,7 +232,7 @@ fn parse_line(input: &str) -> IResult<&str, Vec<char>> {
 fn parse_input(input: &'static str) -> Result<Vec<Pattern>> {
     let (_, input) = parse(input)?;
 
-    println!("{:?}", input);
+    println!("{input:?}");
 
     Ok(input)
 }

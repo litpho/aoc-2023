@@ -19,7 +19,7 @@ static GLOBAL_DATA: Lazy<Mutex<HashMap<u64, Vec<usize>>>> = Lazy::new(|| {
 
 fn main() -> Result<()> {
     let (took, result) = took::took(|| parse_input(DATA));
-    println!("Time spent parsing: {}", took);
+    println!("Time spent parsing: {took}");
     let input = result?;
 
     let (took, result) = took::took(|| part_one(&input));
@@ -37,6 +37,7 @@ fn part_one(input: &[Row]) -> u64 {
     input.iter().map(solve).sum()
 }
 
+#[allow(dead_code)]
 fn part_two(input: &[Row]) -> u64 {
     input
         .iter()

@@ -6,7 +6,7 @@ const DATA: &str = include_str!("input.txt");
 
 fn main() -> Result<()> {
     let (took, result) = took::took(|| parse_input(DATA));
-    println!("Time spent parsing: {}", took);
+    println!("Time spent parsing: {took}");
     let input = result?;
 
     let (took, result) = took::took(|| part_one(input));
@@ -14,7 +14,7 @@ fn main() -> Result<()> {
     println!("Time spent: {took}");
 
     let (took, result) = took::took(|| parse_input(DATA));
-    println!("Time spent parsing: {}", took);
+    println!("Time spent parsing: {took}");
     let input = result?;
 
     let (took, result) = took::took(|| part_two(input));
@@ -59,7 +59,7 @@ impl Galaxy {
             new_rows.set(*y as usize, false);
         });
 
-        for (x, y) in self.stars.iter_mut() {
+        for (x, y) in &mut self.stars {
             *x += (0..*x)
                 .filter(|z| new_cols.get(*z as usize).unwrap())
                 .count() as u64

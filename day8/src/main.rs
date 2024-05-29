@@ -17,7 +17,7 @@ const DATA: &str = include_str!("input.txt");
 
 fn main() -> Result<()> {
     let (took, result) = took::took(|| parse_input(DATA));
-    println!("Time spent parsing: {}", took);
+    println!("Time spent parsing: {took}");
     let Input { directions, map } = result?;
 
     let (took, result) = took::took(|| part_one(&directions, &map));

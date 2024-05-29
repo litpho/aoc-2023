@@ -5,24 +5,22 @@ const DIGITS_AS_WORDS: [&str; 10] = [
     "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
 ];
 
-fn main() -> Result<()> {
+fn main() {
     let (took, result) = took::took(|| parse_input_one(DATA));
-    println!("Time spent parsing: {}", took);
-    let input = result?;
+    println!("Time spent parsing: {took}");
+    let input = result;
 
     let (took, result) = took::took(|| part_one(&input));
     println!("Result part one: {result}");
     println!("Time spent: {took}");
 
     let (took, result) = took::took(|| parse_input_two(DATA));
-    println!("Time spent parsing: {}", took);
-    let input = result?;
+    println!("Time spent parsing: {took}");
+    let input = result;
 
     let (took, result) = took::took(|| part_two(&input));
     println!("Result part two: {result}");
     println!("Time spent: {took}");
-
-    Ok(())
 }
 
 fn part_one(input: &[u32]) -> u32 {
@@ -33,16 +31,12 @@ fn part_two(input: &[u32]) -> u32 {
     input.iter().sum()
 }
 
-fn parse_input_one(input: &'static str) -> Result<Vec<u32>> {
-    let input = parse(input, false);
-
-    Ok(input)
+fn parse_input_one(input: &'static str) -> Vec<u32> {
+    parse(input, false)
 }
 
-fn parse_input_two(input: &'static str) -> Result<Vec<u32>> {
-    let input = parse(input, true);
-
-    Ok(input)
+fn parse_input_two(input: &'static str) -> Vec<u32> {
+    parse(input, true)
 }
 
 fn parse(input: &str, use_words: bool) -> Vec<u32> {
@@ -89,30 +83,22 @@ mod tests {
     const TESTDATA2: &str = include_str!("test2.txt");
 
     #[test]
-    fn test_part_one_testdata() -> Result<()> {
-        assert_eq!(142, part_one(&parse_input_one(TESTDATA)?));
-
-        Ok(())
+    fn test_part_one_testdata() {
+        assert_eq!(142, part_one(&parse_input_one(TESTDATA)));
     }
 
     #[test]
-    fn test_part_one() -> Result<()> {
-        assert_eq!(55712, part_one(&parse_input_one(DATA)?));
-
-        Ok(())
+    fn test_part_one() {
+        assert_eq!(55712, part_one(&parse_input_one(DATA)));
     }
 
     #[test]
-    fn test_part_two_testdata() -> Result<()> {
-        assert_eq!(281, part_two(&parse_input_two(TESTDATA2)?));
-
-        Ok(())
+    fn test_part_two_testdata() {
+        assert_eq!(281, part_two(&parse_input_two(TESTDATA2)));
     }
 
     #[test]
-    fn test_part_two() -> Result<()> {
-        assert_eq!(55413, part_two(&parse_input_two(DATA)?));
-
-        Ok(())
+    fn test_part_two() {
+        assert_eq!(55413, part_two(&parse_input_two(DATA)));
     }
 }

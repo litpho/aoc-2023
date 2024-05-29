@@ -9,7 +9,7 @@ const DATA: &str = include_str!("input.txt");
 
 fn main() -> Result<()> {
     let (took, result) = took::took(|| parse_input(DATA));
-    println!("Time spent parsing: {}", took);
+    println!("Time spent parsing: {took}");
     let mut input = result?;
 
     let (took, result) = took::took(|| part_one(&input));
@@ -43,7 +43,7 @@ fn solve_line(input: &[i32]) -> i32 {
             .windows(2)
             .map(|x| x[1] - x[0])
             .collect::<Vec<i32>>();
-        if next_line.iter().sum::<i32>() == 0 {
+        if next_line.iter().all(|x| x == &0) {
             None
         } else {
             Some(next_line)

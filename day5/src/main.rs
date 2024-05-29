@@ -15,7 +15,7 @@ const DATA: &str = include_str!("input.txt");
 
 fn main() -> Result<()> {
     let (took, result) = took::took(|| parse_input(DATA));
-    println!("Time spent parsing: {}", took);
+    println!("Time spent parsing: {took}");
     let input = result?;
 
     let (took, result) = took::took(|| part_one(&input));
@@ -62,13 +62,13 @@ struct Almanac {
 
 impl Almanac {
     pub fn seed_to_location(&self, seed: u64) -> u64 {
-        let soil = self.seed_to_soil.get(&seed);
-        let fertilizer = self.soil_to_fertilizer.get(&soil);
-        let water = self.fertilizer_to_water.get(&fertilizer);
-        let light = self.water_to_light.get(&water);
-        let temperature = self.light_to_temperature.get(&light);
-        let humidity = self.temperature_to_humidity.get(&temperature);
-        self.humidity_to_location.get(&humidity)
+        let soil = self.seed_to_soil.get(seed);
+        let fertilizer = self.soil_to_fertilizer.get(soil);
+        let water = self.fertilizer_to_water.get(fertilizer);
+        let light = self.water_to_light.get(water);
+        let temperature = self.light_to_temperature.get(light);
+        let humidity = self.temperature_to_humidity.get(temperature);
+        self.humidity_to_location.get(humidity)
     }
 }
 
@@ -84,17 +84,17 @@ struct AlmanacRange {
 }
 
 impl AlmanacMap {
-    pub fn get(&self, key: &u64) -> u64 {
+    pub fn get(&self, key: u64) -> u64 {
         self.ranges
             .iter()
             .find_map(|r| {
-                if r.range.contains(key) {
+                if r.range.contains(&key) {
                     Some(key - r.range.start + r.base)
                 } else {
                     None
                 }
             })
-            .unwrap_or(*key)
+            .unwrap_or(key)
     }
 }
 
@@ -131,7 +131,7 @@ fn parse_seeds(input: &str) -> IResult<&str, Vec<u64>> {
 fn parse_map<'a>(input: &'a str, _label: &str) -> IResult<&'a str, AlmanacMap> {
     let (input, _) = delimited(
         line_ending,
-        tag(format!("{} map:", _label).as_str()),
+        tag(format!("{_label} map:").as_str()),
         line_ending,
     )(input)?;
     let (input, lines) = terminated(
@@ -169,10 +169,10 @@ mod tests {
     fn test_part_one_testdata() -> Result<()> {
         let almanac = parse_input(TESTDATA)?;
 
-        assert_eq!(81, almanac.seed_to_soil.get(&79));
-        assert_eq!(14, almanac.seed_to_soil.get(&14));
-        assert_eq!(57, almanac.seed_to_soil.get(&55));
-        assert_eq!(13, almanac.seed_to_soil.get(&13));
+        assert_eq!(81, almanac.seed_to_soil.get(79));
+        assert_eq!(14, almanac.seed_to_soil.get(14));
+        assert_eq!(57, almanac.seed_to_soil.get(55));
+        assert_eq!(13, almanac.seed_to_soil.get(13));
 
         assert_eq!(82, almanac.seed_to_location(79));
         assert_eq!(43, almanac.seed_to_location(14));

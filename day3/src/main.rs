@@ -1,5 +1,5 @@
 use ahash::{HashSet, HashSetExt};
-use std::ops::Range;
+use std::ops::RangeInclusive;
 
 use anyhow::Result;
 
@@ -7,7 +7,7 @@ const DATA: &str = include_str!("input.txt");
 
 fn main() -> Result<()> {
     let (took, result) = took::took(|| parse_input(DATA));
-    println!("Time spent parsing: {}", took);
+    println!("Time spent parsing: {took}");
     let input = result?;
 
     let (took, result) = took::took(|| part_one(&input));
@@ -23,8 +23,8 @@ fn main() -> Result<()> {
 
 fn part_one(input: &EngineMap) -> u32 {
     let mut numbers: HashSet<Number> = HashSet::new();
-    for symbol in input.symbols.iter() {
-        for number in input.numbers.iter() {
+    for symbol in &input.symbols {
+        for number in &input.numbers {
             if number.near_symbol(symbol) {
                 numbers.insert(number.clone());
             }
@@ -38,7 +38,7 @@ fn part_two(input: &EngineMap) -> u32 {
     let mut gear_total = 0;
     for symbol in input.symbols.iter().filter(|s| s.value == '*') {
         let mut numbers = vec![];
-        for number in input.numbers.iter() {
+        for number in &input.numbers {
             if number.near_symbol(symbol) {
                 numbers.push(number.value);
             }
@@ -70,8 +70,8 @@ impl Number {
             && self.horizontal_range().contains(&symbol.position.0)
     }
 
-    fn horizontal_range(&self) -> Range<usize> {
-        self.position.0.saturating_sub(1)..self.position.0 + self.length + 1
+    fn horizontal_range(&self) -> RangeInclusive<usize> {
+        self.position.0.saturating_sub(1)..=(self.position.0 + self.length)
     }
 }
 
